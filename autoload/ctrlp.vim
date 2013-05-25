@@ -974,14 +974,13 @@ fu! ctrlp#acceptfile(mode, line, ...)
 		let useb = bufnr > 0 && buflisted(bufnr) && ( empty(tail) || useb )
 		let cmd =
 			\ md == 't' || s:splitwin == 1 ? ( useb ? 'tab sb' : 'tabe' ) :
-			\ md == 'h' || s:splitwin == 2 ? ( useb ? 'sb' : 'new' ) :
-			\ md == 'v' || s:splitwin == 3 ? ( useb ? 'vert sb' : 'vne' ) :
+            \ (md =='h' || md=='l') || s:splitwin == 3 ? ( useb ? 'vert sb' : 'vne' ) :
 			\ call('ctrlp#normcmd', useb ? ['b', 'bo vert sb'] : ['e'])
 		" Reset &switchbuf option
 		let [swb, &swb] = [&swb, '']
 		" Open new window/buffer
 		let [fid, tail] = [( useb ? bufnr : filpath ), ( a:0 ? ' +'.a:1 : tail )]
-		let args = [cmd, fid, tail, 1, [useb, j2l]]
+		let args = [cmd, fid, tail, 1, [useb, j2l], md == 'l' ? "normal \<C-Del>" : '']
 		cal call('s:openfile', args)
 		let &swb = swb
 	en
@@ -1481,29 +1480,7 @@ fu! s:getparent(item)
 endf
 
 fu! s:findroot(curr, mark, depth, type)
-	let [depth, fnd] = [a:depth + 1, 0]
-	if type(a:mark) == 1
-		let fnd = s:glbpath(s:fnesc(a:curr, 'g', ','), a:mark, 1) != ''
-	elsei type(a:mark) == 3
-		for markr in a:mark
-			if s:glbpath(s:fnesc(a:curr, 'g', ','), markr, 1) != ''
-				let fnd = 1
-				brea
-			en
-		endfo
-	en
-	if fnd
-		if !a:type | cal ctrlp#setdir(a:curr) | en
-		retu [exists('markr') ? markr : a:mark, a:curr]
-	elsei depth > s:maxdepth
-		cal ctrlp#setdir(s:cwd)
-	el
-		let parent = s:getparent(a:curr)
-		if parent != a:curr
-			retu s:findroot(parent, a:mark, depth, a:type)
-		en
-	en
-	retu []
+    return g:GetProjectRootDir()
 endf
 
 fu! ctrlp#setdir(path, ...)
@@ -1964,6 +1941,11 @@ fu! s:openfile(cmd, fid, tail, chkmod, ...)
 	if j2l
 		cal ctrlp#j2l(j2l)
 	en
+
+    if a:0 >= 2 && !empty(a:2)
+        exe a:2
+    end
+
 	if !empty(a:tail)
 		sil! norm! zvzz
 	en
