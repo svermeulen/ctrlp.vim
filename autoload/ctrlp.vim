@@ -980,7 +980,7 @@ fu! ctrlp#acceptfile(mode, line, ...)
 		let [swb, &swb] = [&swb, '']
 		" Open new window/buffer
 		let [fid, tail] = [( useb ? bufnr : filpath ), ( a:0 ? ' +'.a:1 : tail )]
-		let args = [cmd, fid, tail, 1, [useb, j2l], md == 'l' ? "normal \<C-Del>" : '']
+		let args = [cmd, fid, tail, 1, [useb, j2l], md == 'l' ? "normal \<s-f1>" : '']
 		cal call('s:openfile', args)
 		let &swb = swb
 	en
