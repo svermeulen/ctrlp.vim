@@ -1480,7 +1480,7 @@ fu! s:getparent(item)
 endf
 
 fu! s:findroot(curr, mark, depth, type)
-    return Ave#Util#GetProjectRootDir()
+    return Ave#ProjectRoot#GetDir()
 endf
 
 fu! ctrlp#setdir(path, ...)
