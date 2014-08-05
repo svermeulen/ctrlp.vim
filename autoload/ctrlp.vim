@@ -652,6 +652,7 @@ fu! s:PrtInsert(...)
 		\ : type ==# 's' ? s:regisfilter('/')
 		\ : type ==# 'v' ? s:crvisual
 		\ : type ==# 'c' ? s:regisfilter('+')
+        \ : type ==# 'z' ? s:regisfilter('"')
 		\ : type ==# 'r' ? regcont : ''
 	cal s:BuildPrompt(1)
 	unl s:act_add
