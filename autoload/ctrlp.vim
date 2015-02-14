@@ -112,8 +112,8 @@ let [s:lcmap, s:prtmaps] = ['nn <buffer> <silent>', {
     \ 'PrtDelete()':          ['<del>'],
     \ 'PrtDeleteWord()':      ['<c-w>'],
     \ 'PrtClear()':           ['<c-u>'],
-    \ 'PrtSelectMove("j")':   ['<c-j>', '<down>'],
-    \ 'PrtSelectMove("k")':   ['<c-k>', '<up>'],
+    \ 'PrtSelectMove("j")':   ['<down>'],
+    \ 'PrtSelectMove("k")':   ['<up>'],
     \ 'PrtSelectMove("t")':   ['<Home>', '<kHome>'],
     \ 'PrtSelectMove("b")':   ['<End>', '<kEnd>'],
     \ 'PrtSelectMove("u")':   ['<PageUp>', '<kPageUp>'],
@@ -140,7 +140,7 @@ let [s:lcmap, s:prtmaps] = ['nn <buffer> <silent>', {
     \ 'PrtDeleteEnt()':       ['<F7>'],
     \ 'CreateNewFile()':      ['<c-y>'],
     \ 'MarkToOpen()':         ['<c-z>'],
-    \ 'OpenMulti()':          ['<c-o>'],
+    \ 'OpenMulti()':          [''],
     \ 'PrtExit()':            ['<esc>', '<c-c>', '<c-g>'],
     \ }]
 
