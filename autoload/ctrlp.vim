@@ -1453,10 +1453,52 @@ fu! ctrlp#dirnfile(entries)
     retu items
 endf
 
+function! g:GetUsrIgn()
+    if exists("b:usrign")
+        return b:usrign
+    endif
+
+    if exists("b:ctrlpcustom_ignore")
+        let b:usrign = copy(s:usrign)
+
+        for key in keys(b:ctrlpcustom_ignore)
+            let bufferValues = b:ctrlpcustom_ignore[key]
+
+            if has_key(b:usrign, key)
+                for value in bufferValues
+                    call add(b:usrign[key], value)
+                endfor
+            else
+                let b:usrign[key] = bufferValues
+            endif
+        endfor
+    else
+        let b:usrign = copy(s:usrign)
+    endif
+
+    return b:usrign
+endfunction
+
 fu! s:usrign(item, type)
-    retu s:igntype == 1 ? a:item =~ s:usrign
-        \ : s:igntype == 4 && has_key(s:usrign, a:type) && s:usrign[a:type] != ''
-        \ ? a:item =~ s:usrign[a:type] : 0
+    let usrign = s:tempusrign
+
+    if s:igntype == 1
+        return a:item =~ usrign
+    endif
+
+    if s:igntype == 4 && has_key(usrign, a:type)
+        let patterns = usrign[a:type]
+
+        for pattern in patterns
+            if pattern != '' && a:item =~ pattern
+                return 1
+            endif
+        endfor
+
+        return 0
+    endif
+
+    return 0
 endf
 
 fu! s:samerootsyml(each, isfile, cwd)
@@ -2136,6 +2178,7 @@ fu! ctrlp#init(type, ...)
     let [s:ermsg, v:errmsg] = [v:errmsg, '']
     let [s:matches, s:init] = [1, 1]
     cal s:Reset(a:0 ? a:1 : {})
+    let s:tempusrign = g:GetUsrIgn()
     noa cal s:Open()
     cal s:SetWD(a:0 ? a:1 : {})
     cal s:MapNorms()
