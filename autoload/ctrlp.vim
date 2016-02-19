@@ -1459,7 +1459,7 @@ function! g:GetUsrIgn()
     endif
 
     if exists("b:ctrlpcustom_ignore")
-        let b:usrign = copy(s:usrign)
+        let b:usrign = deepcopy(s:usrign)
 
         for key in keys(b:ctrlpcustom_ignore)
             let bufferValues = b:ctrlpcustom_ignore[key]
